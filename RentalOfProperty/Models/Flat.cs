@@ -10,6 +10,8 @@ namespace RentalOfProperty.Models
         public int Id { get; set; }
         public int AddressId { get; set; }
 
+        public string Header { get; set; }
+
         public string TypeOfHouse { get; set; }
 
         public string Balcony { get; set; }

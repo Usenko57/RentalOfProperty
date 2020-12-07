@@ -28,9 +28,8 @@ namespace RentalOfProperty.Controllers
 
         public IActionResult Index()
         {
-            var flats = _dataRepository.GetFlats();
-            Console.WriteLine(flats);
-            return View();
+            FlatViewModel flatViewModel = new FlatViewModel { Flats = _dataRepository.GetFlats() };
+            return View(flatViewModel);
         }
 
         public IActionResult Privacy()

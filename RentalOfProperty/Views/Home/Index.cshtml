@@ -1,8 +1,37 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using RentalOfProperty.ViewModels
+@model FlatViewModel
+@{
+    ViewData["Title"] = "Главная";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div>
+    <h1>Аренда жилья</h1>
 </div>
+<div class="form-group">
+    <div class="row">
+        <div class="col-3">
+            <select class="form-control" asp-items="@new SelectList(new string[]{ })"></select>
+        </div>
+        <div class="btn-group col-4" role="group">
+            <button type="button" class="btn btn-secondary">1-комн.</button>
+            <button type="button" class="btn btn-secondary">2-комн.</button>
+            <button type="button" class="btn btn-secondary">3-комн.</button>
+            <button type="button" class="btn btn-secondary">4+</button>
+        </div>
+        <div class="input-group col-3" role="group">
+            <input type="text" class="form-control" placeholder="от">
+            <input type="text" class="form-control" placeholder="до">
+            <span class="font-weight-bolder">&nbspр.</span>
+        </div>
+    </div>
+</div>
+<div class="list-group">
+    @foreach (var flat in Model.Flats)
+    {
+        <h5>@flat.Header</h5>
+        <label>г. @flat.Address.City.Name</label>
+        <label>@flat.Address.Street.Name  д.@flat.Address.HouseNumber кв. @flat.Address.FlatNumber</label>
+        <label>Количество комнат: @flat.NumberOfRooms</label>
+    }
+</div>
+

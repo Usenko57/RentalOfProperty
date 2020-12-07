@@ -23,9 +23,9 @@ namespace RentalOfProperty.Data
             using (var connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
-                var flats = connection.Query<Flat>(@"SELECT id, address_id as addressId, type_of_house as typeOfHouse, " +
-                    "number_of_rooms as numberOfRooms, price_for_month as priceForMonth, total_area as totalArea, " +
-                    "additional_information as additionalInformation FROM flat;");
+                var flats = connection.Query<Flat>(@"SELECT id, address_id as addressId, header, type_of_house as " +
+                    "typeOfHouse, number_of_rooms as numberOfRooms, price_for_month as priceForMonth, total_area as totalArea, " +
+                    "additional_information as additionalInformation, balcony FROM flat;");
                 foreach (var flat in flats)
                 {
                     flat.Address = GetAddress(flat.AddressId);

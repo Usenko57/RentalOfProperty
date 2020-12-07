@@ -9,41 +9,20 @@
 </head>
 <body class="bg-light">
     <header>
-        <div class="p-3">
-            <h1>Аренда жилья</h1>
-        </div>
-        <div class="form-group p-3">
-            <div class="row">
-                <div class="col-3">
-                    <select class="form-control" asp-items="@new SelectList(new string[]{ })"></select>
-                </div>
-                <div class="btn-group col-4" role="group">
-                    <button type="button" class="btn btn-secondary">1-комн.</button>
-                    <button type="button" class="btn btn-secondary">2-комн.</button>
-                    <button type="button" class="btn btn-secondary">3-комн.</button>
-                    <button type="button" class="btn btn-secondary">4+</button>
-                </div>
-                <div class="input-group col-3" role="group">
-                    <input type="text" class="form-control" placeholder="от">
-                    <input type="text" class="form-control" placeholder="до">
-                    <span class="font-weight-bolder">&nbspр.</span>
-                </div>
-            </div>
-        </div>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">RentalOfProperty</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">                    
+                    <ul class="navbar-nav flex-grow-reverse">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark font-weight-bold" asp-area="" asp-controller="Account" asp-action="Login">Войти</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark font-weight-bold" asp-area="" asp-controller="Account" asp-action="Register">Регистрация</a>
                         </li>
                     </ul>
                 </div>
