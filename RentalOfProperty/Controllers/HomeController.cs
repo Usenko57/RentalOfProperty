@@ -32,6 +32,12 @@ namespace RentalOfProperty.Controllers
             return View(flatViewModel);
         }
 
+        [HttpGet]
+        public IActionResult Announcement()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();
