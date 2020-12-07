@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Dapper;
 using MySql.Data.MySqlClient;
 using RentalOfProperty.Models;
+using RentalOfProperty.ViewModels;
 
 namespace RentalOfProperty.Data
 {
@@ -78,6 +79,28 @@ namespace RentalOfProperty.Data
                 connection.Open();
                 return connection.QueryFirstOrDefault<City>(@"SELECT id, name FROM city WHERE id=@CityId;",
                     new { CityId = city_id });
+            }
+        }
+
+        public User LoginUser(string email, string password)
+        {
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                connection.Open();
+                return connection.QueryFirstOrDefault<User>(@"SELECT id, first_name as firstName, last_name as " +
+                    "lastName, email, phone_number as phoneNumber FROM user WHERE email=@Email and password=" +
+                    "MD5(@Password)", new { Email = email, Password = password });
+            }
+        }
+
+        public void RegisterUser(RegisterModel model)
+        {
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                connection.Open();
+                connection.Execute(@"INSERT INTO user(first_name, last_name, email, 
+                phone_number, password) VALUES (@FirstName, @LastName, @Email, @PhoneNumber, MD5(@Password));",
+                new { model.FirstName, model.LastName, model.Email, model.PhoneNumber, model.Password });                
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using RentalOfProperty.Models;
+using RentalOfProperty.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,7 @@ namespace RentalOfProperty.Data
         Address GetAddress(int address_id);
         Street GetStreet(int street_id);
         City GetCity(int city_id);
+        User LoginUser(string email, string password);
+        void RegisterUser(RegisterModel model);
     }
 }
