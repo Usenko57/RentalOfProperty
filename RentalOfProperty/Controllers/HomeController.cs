@@ -26,11 +26,28 @@ namespace RentalOfProperty.Controllers
             webHostEnvironment = hostEnvironment;
             _dataRepository = dataRepository;
         }
-
-        public IActionResult Index()
+        
+        public IActionResult Index(FlatViewModel model)
         {
-            FlatViewModel flatViewModel = new FlatViewModel { Flats = _dataRepository.GetFlats() };
-            return View(flatViewModel);
+            SetDefaultValues(model);
+            model = new FlatViewModel { Flats = _dataRepository.GetFlats(model) };
+            return View(model);
+        }
+
+        public void SetDefaultValues(FlatViewModel model)
+        {
+            if(model.CitySearch is null)
+            {
+                model.CitySearch = string.Empty;
+            }
+            if(model.FromPrice is null)
+            {
+                model.FromPrice = 0;
+            }
+            if (model.ToPrice is null)
+            {
+                model.ToPrice = double.MaxValue;
+            }
         }
 
         [HttpGet]
@@ -83,6 +100,22 @@ namespace RentalOfProperty.Controllers
             };            
             return View(model);
         }
+        
+        [HttpGet]
+        public IActionResult MyAnnouncements(FlatViewModel model)
+        {            
+            SetDefaultValues(model);
+            model = new FlatViewModel { Flats = _dataRepository.GetFlats(model).Where(m => m.Owner.Id 
+            == _dataRepository.GetUserByEmail(User.Identity.Name).Id) };
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            _dataRepository.DeleteFlat(id);
+            return RedirectToAction("MyAnnouncements");
+        } 
 
         public IActionResult Privacy()
         {

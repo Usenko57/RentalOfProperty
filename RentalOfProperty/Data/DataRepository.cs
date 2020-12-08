@@ -20,7 +20,7 @@ namespace RentalOfProperty.Data
             _connectionString = configuration["ConnectionStrings:MySQLConnection"];
         }
 
-        public IEnumerable<Flat> GetFlats()
+        public IEnumerable<Flat> GetFlats(FlatViewModel model)
         {
             using (var connection = new MySqlConnection(_connectionString))
             {
@@ -28,13 +28,31 @@ namespace RentalOfProperty.Data
                 var flats = connection.Query<Flat>(@"SELECT id, address_id as addressId, header, type_of_house as " +
                     "typeOfHouse, number_of_rooms as numberOfRooms, price_for_month as priceForMonth, total_area as totalArea, " +
                     "additional_information as additionalInformation, balcony, owner_id as ownerId, " +
-                    "flat_picture as flatPicture FROM flat;");
+                    "flat_picture as flatPicture FROM flat WHERE address_id in (SELECT id from address WHERE city_id in(SELECT " +
+                    "id FROM city WHERE lower(name) like @City)) AND flat.price_for_month >= @FromPrice " +
+                    "AND flat.price_for_month <= @ToPrice;",
+                    new
+                    {
+                        City = model.CitySearch.ToLower() + "%",
+                        FromPrice = model.FromPrice,
+                        ToPrice = model.ToPrice
+                    });
                 foreach (var flat in flats)
                 {
                     flat.Address = GetAddress(flat.AddressId);
                     flat.Owner = GetUserById(flat.OwnerId);
                 }
                 return flats;
+            }
+        }
+
+        public void DeleteFlat(int id)
+        {
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                connection.Open();
+                connection.Execute(@"DELETE FROM flat WHERE id=@Id;",
+                new { Id = id });
             }
         }
 

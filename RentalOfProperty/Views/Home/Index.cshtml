@@ -4,55 +4,60 @@
     ViewData["Title"] = "Главная";
 }
 
-<div>
-    <h1>Аренда жилья</h1>
-</div>
-<div class="form-group">
-    <div class="row">
-        <div class="col-3">
-            <input type="text" class="form-control" placeholder="Город">
+<h1>Аренда жилья</h1>
+<form id="index_form" asp-action="Index" asp-controller="Home" method="get">
+    <div class="form-group">
+        <div class="row">
+            <div class="col-3">
+                <input id="city" asp-for="CitySearch" type="text" class="form-control" placeholder="Город">
+            </div>
+
+            <div class="input-group col-2" role="group">
+                <input id="FromPrice" asp-for="FromPrice" type="text" class="form-control" placeholder="от">
+                <input id="ToPrice" asp-for="ToPrice" type="text" class="form-control" placeholder="до">
+                <span class="font-weight-bolder">&nbspр.</span>
+            </div>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="input-group col-3" role="group">
+                    <a type="button" class="btn btn-outline-info" asp-controller="Home" asp-action="Announcement">Добавить объявление</a>
+                </div>
+            }
         </div>
-        <div class="btn-group col-4" role="group">
-            <button type="button" class="btn btn-secondary">1-комн.</button>
-            <button type="button" class="btn btn-secondary">2-комн.</button>
-            <button type="button" class="btn btn-secondary">3-комн.</button>
-            <button type="button" class="btn btn-secondary">4+</button>
-        </div>
-        <div class="input-group col-2" role="group">
-            <input type="text" class="form-control" placeholder="от">
-            <input type="text" class="form-control" placeholder="до">
-            <span class="font-weight-bolder">&nbspр.</span>
-        </div>
-        @if (User.Identity.IsAuthenticated)
+    </div>
+    @if (Model.Flats.Count() == 0)
+    {
+        <h3 class="pt-6">Нет доступных квартир</h3>
+    }
+    <div class="list-group pt-3">
+        @foreach (var flat in Model.Flats)
         {
-            <div class="input-group col-3" role="group">
-                <a type="button" class="btn btn-outline-info" asp-controller="Home" asp-action="Announcement">Добавить объявление</a>
+            <div class="border-bottom border-dark">
+                <a class="pt-2 font-weight-bold" asp-controller="Home" asp-action="Detail" asp-route-id="@flat.Id">@flat.Header</a>
+                <div class="row">
+                    <div class="col-3">
+                        <img src="~/images/@flat.FlatPicture"
+                             height="250" width="250"
+                             asp-append-version="true" />
+                        <h5>@flat.PriceForMonth руб/месяц</h5>
+                    </div>
+                    <div class="d-flex flex-column col-6">
+                        <h6>г. @flat.Address.City.Name</h6>
+                        <h6>@flat.Address.Street.Name  д. @flat.Address.HouseNumber кв. @flat.Address.FlatNumber</h6>
+                        <h6>Количество комнат: @flat.NumberOfRooms</h6>
+                        <h6>Общая площадь: @flat.TotalArea м²</h6>
+                        <h6>Балкон: @flat.Balcony</h6>
+                        <label>@flat.AdditionalInformation</label>
+                    </div>
+                </div>
             </div>
         }
     </div>
-</div>
-<div class="list-group pt-3">
-    @foreach (var flat in Model.Flats)
-    {
-        <div class="border-bottom border-dark">
-            <a class="pt-2 font-weight-bold" asp-controller="Home" asp-action="Detail" asp-route-id="@flat.Id">@flat.Header</a>
-            <div class="row">
-                <div class="col-3">
-                    <img src="~/images/@flat.FlatPicture"
-                         height="250" width="250"
-                         asp-append-version="true" />
-                    <h5>@Model.PriceForMonth руб/месяц</h5>
-                </div>
-                <div class="d-flex flex-column col-6">
-                    <h6>г. @flat.Address.City.Name</h6>
-                    <h6>@flat.Address.Street.Name  д. @flat.Address.HouseNumber кв. @flat.Address.FlatNumber</h6>
-                    <h6>Количество комнат: @flat.NumberOfRooms</h6>
-                    <h6>Общая площадь: @flat.TotalArea</h6>
-                    <h6>Балкон: @flat.Balcony</h6>
-                    <label>@flat.AdditionalInformation</label>
-                </div>
-            </div>
-        </div>
-    }
-</div>
-
+</form>
+@section scripts{
+    <script>
+        $("#city, #FromPrice, #ToPrice").on("keyup", function () {
+            $("#index_form").submit();
+        });
+    </script>
+}

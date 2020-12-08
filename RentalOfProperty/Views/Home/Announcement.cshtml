@@ -40,14 +40,18 @@
             </div>
             <div class="col-6">
                 <h3>Характеристики</h3>
-                <div class="pt-2">
+                <div class="pt-2 col-4 pl-0">
                     <label asp-for="TypeOfHouse">Тип дома</label><br />
-                    <input asp-for="TypeOfHouse" />
+                    <select asp-for="TypeOfHouse" class="form-control">
+                        <option selected value="Кирпичный">Кирпичный</option>
+                        <option value="Панельный">Панельный</option>
+                        <option value="Монолитный">Монолитный</option>
+                    </select>
                     <span asp-validation-for="TypeOfHouse" />
                 </div>
                 <div class="pt-2">
                     <label asp-for="NumberOfRooms">Количество комнат</label><br />
-                    <input asp-for="NumberOfRooms" />
+                    <input min="1" asp-for="NumberOfRooms" />
                     <span asp-validation-for="NumberOfRooms" />
                 </div>
                 <div class="pt-2">
@@ -56,15 +60,19 @@
                     <span asp-validation-for="PriceForMonth" />
                 </div>
                 <div class="pt-2">
-                    <label asp-for="TotalArea">Общая площадь</label><br />
+                    <label asp-for="TotalArea">Общая площадь(м²)</label><br />
                     <input asp-for="TotalArea" />
                     <span asp-validation-for="TotalArea" />
                 </div>
-                <div class="pt-2">
+                <div class="pt-2 col-4 pl-0">
                     <label asp-for="Balcony">Балкон</label><br />
-                    <input asp-for="Balcony" />
+                    <select asp-for="Balcony" class="form-control">
+                        <option selected value="Балкон">Балкон</option>
+                        <option value="Лоджия">Лоджия</option>
+                        <option value="Отсутствует">Отсутствует</option>
+                    </select>
                     <span asp-validation-for="Balcony" />
-                </div>                
+                </div>
                 <div class="pt-2">
                     <label asp-for="AdditionalInformation">Дополнительная информация</label><br />
                     <textarea class="form-control" asp-for="AdditionalInformation"></textarea>
@@ -90,7 +98,7 @@
 
 
 @section scripts{
-    <script type="text/javascript">        
+    <script type="text/javascript">
         $(".custom-file-input").on("change", function () {
             var fileName = $(this).val().split("\\").pop();
             $(this).siblings(".custom-file-label").addClass("selected").html(fileName);

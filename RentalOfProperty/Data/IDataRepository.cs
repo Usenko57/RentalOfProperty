@@ -9,7 +9,7 @@ namespace RentalOfProperty.Data
 {
     public interface IDataRepository
     {
-        IEnumerable<Flat> GetFlats();
+        IEnumerable<Flat> GetFlats(FlatViewModel model);
         Flat GetFlat(int flat_id);
         Address GetAddress(int address_id);
         Street GetStreet(int street_id);
@@ -20,5 +20,6 @@ namespace RentalOfProperty.Data
 
         void InsertFlat(FlatViewModel model);
         void RegisterUser(RegisterModel model);
+        void DeleteFlat(int id);        
     }
 }
