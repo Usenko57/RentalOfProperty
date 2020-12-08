@@ -96,15 +96,14 @@ namespace RentalOfProperty.Data
 
         public void InsertFlat(FlatViewModel model)
         {
-            InsertCity(model.City.Trim());
-            InsertStreet(model.Street.Trim());
+            InsertAddress(model);
             using (var connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
                 connection.Execute(@"INSERT INTO flat(type_of_house, number_of_rooms, price_for_month, total_area,
                                     additional_information, balcony, header, owner_id, address_id) SELECT @TypeOfHouse, @NumberOfRooms, 
                                     @PriceForMonth, @TotalArea, @AdditionalInformation, @Balcony, @Header, @OwnerId, id FROM address 
-                                    WHERE city_id in (SELECT id FROM city WHERE name = 'Минск') AND street_id in (SELECT id FROM street WHERE
+                                    WHERE city_id in (SELECT id FROM city WHERE name = @City) AND street_id in (SELECT id FROM street WHERE
                                     name = @Street) AND address.house_number = @HouseNumber AND address.flat_number = @FlatNumber;",
                 new
                 {
@@ -121,6 +120,20 @@ namespace RentalOfProperty.Data
                     Header = model.Header.Trim(),
                     model.OwnerId
                 });
+            }
+        }
+
+        public void InsertAddress(FlatViewModel model)
+        {
+            InsertCity(model.City.Trim());
+            InsertStreet(model.Street.Trim());
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                connection.Open();
+                connection.Execute(@"INSERT IGNORE INTO Address(city_id, street_id, house_number, flat_number)
+                SELECT (SELECT id from city WHERE name = @City), (SELECT id from street WHERE name = @Street), 
+                @HouseNumber, @FlatNumber;",
+                new { model.City, model.Street, model.HouseNumber, model.FlatNumber });
             }
         }
 
