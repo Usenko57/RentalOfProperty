@@ -15,6 +15,10 @@ namespace RentalOfProperty.Data
         Street GetStreet(int street_id);
         City GetCity(int city_id);
         User LoginUser(string email, string password);
+
+        User GetUserByEmail(string email);
+
+        void InsertFlat(FlatViewModel model);
         void RegisterUser(RegisterModel model);
     }
 }

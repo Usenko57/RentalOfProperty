@@ -10,6 +10,8 @@ namespace RentalOfProperty.Models
         public int Id { get; set; }
         public int AddressId { get; set; }
 
+        public int OwnerId { get; set; }
+
         public string Header { get; set; }
 
         public string TypeOfHouse { get; set; }
@@ -27,5 +29,7 @@ namespace RentalOfProperty.Models
         public string FlatPictures { get; set; }
 
         public Address Address { get; set; }
+
+        public User Owner { get; set; }
     }
 }

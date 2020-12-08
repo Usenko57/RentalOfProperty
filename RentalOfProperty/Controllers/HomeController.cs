@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using RentalOfProperty.Data;
 using RentalOfProperty.Models;
 using RentalOfProperty.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RentalOfProperty.Controllers
 {
@@ -33,9 +34,25 @@ namespace RentalOfProperty.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult Announcement()
         {
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public IActionResult Announcement(FlatViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                string uniqueFileName = UploadedFile(model);
+                model.OwnerId = _dataRepository.GetUserByEmail(User.Identity.Name).Id;
+                _dataRepository.InsertFlat(model);
+                return RedirectToAction("Index", "Home");
+            }
+            return View(model);
         }
 
         public IActionResult Privacy()

@@ -1,6 +1,100 @@
-﻿@{
+﻿@using RentalOfProperty.ViewModels;
+@model FlatViewModel
+@{
     ViewData["Title"] = "Добавление объявление";
 }
 
 <h1>Объявление</h1>
 
+<form asp-action="Announcement" asp-controller="Home" asp-anti-forgery="true">
+    <div class="validation" asp-validation-summary="ModelOnly"></div>
+    <div>
+        <div class="pt-2">
+            <h3 asp-for="Header">Заголовок</h3>
+            <textarea class="form-control" type="text" asp-for="Header"></textarea>
+            <span asp-validation-for="Header" />
+        </div>
+        <div class="row pt-5">
+            <div class="col-6">
+                <h3>Адрес</h3>
+                <div class="pt-2">
+                    <label asp-for="City">Город</label><br />
+                    <input type="text" asp-for="City" />
+                    <span asp-validation-for="City" />
+                </div>
+                <div class="pt-2">
+                    <label asp-for="Street">Улица</label><br />
+                    <input type="text" asp-for="Street" />
+                    <span asp-validation-for="Street" />
+                </div>
+                <div class="pt-2">
+                    <label asp-for="HouseNumber">Номер дома</label><br />
+                    <input type="text" asp-for="HouseNumber" />
+                    <span asp-validation-for="HouseNumber" />
+                </div>
+                <div class="pt-2">
+                    <label asp-for="FlatNumber">Квартира</label><br />
+                    <input asp-for="FlatNumber" />
+                    <span asp-validation-for="FlatNumber" />
+                </div>
+            </div>
+            <div class="col-6">
+                <h3>Характеристики</h3>
+                <div class="pt-2">
+                    <label asp-for="TypeOfHouse">Тип дома</label><br />
+                    <input asp-for="TypeOfHouse" />
+                    <span asp-validation-for="TypeOfHouse" />
+                </div>
+                <div class="pt-2">
+                    <label asp-for="NumberOfRooms">Количество комнат</label><br />
+                    <input asp-for="NumberOfRooms" />
+                    <span asp-validation-for="NumberOfRooms" />
+                </div>
+                <div class="pt-2">
+                    <label asp-for="PriceForMonth">Цена за месяц</label><br />
+                    <input asp-for="PriceForMonth" />
+                    <span asp-validation-for="PriceForMonth" />
+                </div>
+                <div class="pt-2">
+                    <label asp-for="TotalArea">Общая площадь</label><br />
+                    <input asp-for="TotalArea" />
+                    <span asp-validation-for="TotalArea" />
+                </div>
+                <div class="pt-2">
+                    <label asp-for="Balcony">Балкон</label><br />
+                    <input asp-for="Balcony" />
+                    <span asp-validation-for="Balcony" />
+                </div>                
+                <div class="pt-2">
+                    <label asp-for="AdditionalInformation">Дополнительная информация</label><br />
+                    <textarea class="form-control" asp-for="AdditionalInformation"></textarea>
+                    <span asp-validation-for="AdditionalInformation" />
+                </div>
+            </div>
+        </div>
+        <div class="col-6 pl-0">
+            <div class="form-group">
+                <label asp-for="FlatPicture" class="control-label">Фотография квартиры</label>
+                <div class="custom-file">
+                    <input asp-for="FlatPicture" class="custom-file-input" id="customFile">
+                    <label class="custom-file-label" for="customFile">Выберите файл</label>
+                </div>
+                <span asp-validation-for="FlatPicture" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="pt-3">
+            <input type="submit" value="Добавить объвление" />
+        </div>
+    </div>
+</form>
+
+
+@section scripts{
+    <script type="text/javascript">
+        // Add the following code if you want the name of the file appear on select
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+    </script>
+}  
