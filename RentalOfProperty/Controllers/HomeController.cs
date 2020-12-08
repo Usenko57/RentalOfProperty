@@ -48,10 +48,39 @@ namespace RentalOfProperty.Controllers
             if (ModelState.IsValid)
             {
                 string uniqueFileName = UploadedFile(model);
+                model.FlatPicturePath = uniqueFileName;
                 model.OwnerId = _dataRepository.GetUserByEmail(User.Identity.Name).Id;
                 _dataRepository.InsertFlat(model);
                 return RedirectToAction("Index", "Home");
             }
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Detail(int id)
+        {
+            Flat flat = _dataRepository.GetFlat(id);
+            if(flat == null)
+            {
+                return NotFound();
+            }
+            FlatViewModel model = new FlatViewModel
+            {
+                Balcony = flat.Balcony,
+                AdditionalInformation = flat.AdditionalInformation,
+                City = flat.Address.City.Name,
+                Street = flat.Address.Street.Name,
+                FlatNumber = flat.Address.FlatNumber,
+                FlatPicturePath = flat.FlatPicture,
+                PriceForMonth = flat.PriceForMonth,
+                HouseNumber = flat.Address.HouseNumber,
+                NumberOfRooms = flat.NumberOfRooms,
+                Header = flat.Header,
+                TotalArea = flat.TotalArea,
+                TypeOfHouse = flat.TypeOfHouse,     
+                OwnerId = flat.OwnerId,
+                Owner = flat.Owner
+            };            
             return View(model);
         }
 

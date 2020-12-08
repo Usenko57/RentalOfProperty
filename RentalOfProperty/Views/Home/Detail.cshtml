@@ -1,0 +1,30 @@
+﻿@using RentalOfProperty.ViewModels
+@model FlatViewModel
+@{
+    ViewData["Title"] = "Подробнее";
+}
+
+<h2>@Model.Header</h2>
+
+<div class="row pt-2">
+    <div class="col-3">
+        <img src="~/images/@Model.FlatPicturePath"
+             height="250" width="250"
+             asp-append-version="true" />
+        <h5>@Model.PriceForMonth руб/месяц</h5>
+    </div>
+    <div class="d-flex flex-column col-6">
+        <h6>г. @Model.City</h6>
+        <h6>@Model.Street  д. @Model.HouseNumber кв. @Model.FlatNumber</h6>
+        <h6>Количество комнат: @Model.NumberOfRooms</h6>
+        <h6>Общая площадь: @Model.TotalArea</h6>
+        <h6>Балкон: @Model.Balcony</h6>
+        <label>@Model.AdditionalInformation</label>
+    </div>    
+</div>
+<div class="d-flex flex-column col-6 pl-0 pt-3">
+    <h3>Контактная информация владельца</h3>
+    <h6>@Model.Owner.LastName&nbsp @Model.Owner.FirstName</h6>
+    <h6>Электронная почта: @Model.Owner.Email</h6>
+    <h6>Контактный номер: @Model.Owner.PhoneNumber</h6>
+</div>

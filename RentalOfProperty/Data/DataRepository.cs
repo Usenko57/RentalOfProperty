@@ -27,10 +27,12 @@ namespace RentalOfProperty.Data
                 connection.Open();
                 var flats = connection.Query<Flat>(@"SELECT id, address_id as addressId, header, type_of_house as " +
                     "typeOfHouse, number_of_rooms as numberOfRooms, price_for_month as priceForMonth, total_area as totalArea, " +
-                    "additional_information as additionalInformation, balcony FROM flat;");
+                    "additional_information as additionalInformation, balcony, owner_id as ownerId, " +
+                    "flat_picture as flatPicture FROM flat;");
                 foreach (var flat in flats)
                 {
                     flat.Address = GetAddress(flat.AddressId);
+                    flat.Owner = GetUserById(flat.OwnerId);
                 }
                 return flats;
             }
@@ -43,8 +45,10 @@ namespace RentalOfProperty.Data
                 connection.Open();
                 var flat = connection.QueryFirstOrDefault<Flat>(@"SELECT id, address_id as addressId, type_of_house as typeOfHouse, " +
                     "number_of_rooms as numberOfRooms, price_for_month as priceForMonth, total_area as totalArea, " +
-                    "additional_information as additionalInformation FROM flat WHERE id=@FlatId", new { FlatId = flat_id });
+                    "additional_information as additionalInformation, balcony, header, owner_id as ownerId, flat_picture as " +
+                    "flatPicture FROM flat WHERE id=@FlatId", new { FlatId = flat_id });
                 flat.Address = GetAddress(flat.AddressId);
+                flat.Owner = GetUserById(flat.OwnerId);
                 return flat;
             }
         }
@@ -83,6 +87,17 @@ namespace RentalOfProperty.Data
             }
         }
 
+        public User GetUserById(int id)
+        {
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                connection.Open();
+                return connection.QueryFirstOrDefault<User>(@"SELECT id, first_name as firstName, last_name as " +
+                    "lastName, email, phone_number as phoneNumber FROM user WHERE id=@Id",
+                    new { Id = id });
+            }
+        }
+
         public User GetUserByEmail(string email)
         {
             using (var connection = new MySqlConnection(_connectionString))
@@ -100,17 +115,14 @@ namespace RentalOfProperty.Data
             using (var connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
-                connection.Execute(@"INSERT INTO flat(type_of_house, number_of_rooms, price_for_month, total_area,
-                                    additional_information, balcony, header, owner_id, address_id) SELECT @TypeOfHouse, @NumberOfRooms, 
+                connection.Execute(@"INSERT INTO flat(flat_picture,type_of_house, number_of_rooms, price_for_month, total_area,
+                                    additional_information, balcony, header, owner_id, address_id) SELECT @FlatPicture, @TypeOfHouse, @NumberOfRooms, 
                                     @PriceForMonth, @TotalArea, @AdditionalInformation, @Balcony, @Header, @OwnerId, id FROM address 
                                     WHERE city_id in (SELECT id FROM city WHERE name = @City) AND street_id in (SELECT id FROM street WHERE
                                     name = @Street) AND address.house_number = @HouseNumber AND address.flat_number = @FlatNumber;",
                 new
                 {
-                    City = model.City.Trim(),
-                    Street = model.Street.Trim(),
-                    HouseNumber = model.HouseNumber.Trim(),
-                    FlatNumber = model.FlatNumber.Trim(),
+                    FlatPicture = model.FlatPicturePath,
                     model.TypeOfHouse,
                     model.NumberOfRooms,
                     model.PriceForMonth,
@@ -118,7 +130,11 @@ namespace RentalOfProperty.Data
                     AdditionalInformation = model.AdditionalInformation.Trim(),
                     model.Balcony,
                     Header = model.Header.Trim(),
-                    model.OwnerId
+                    model.OwnerId,
+                    City = model.City.Trim(),
+                    Street = model.Street.Trim(),
+                    HouseNumber = model.HouseNumber.Trim(),
+                    FlatNumber = model.FlatNumber.Trim()
                 });
             }
         }

@@ -26,7 +26,7 @@ namespace RentalOfProperty.Models
 
         public string AdditionalInformation { get; set; }
 
-        public string FlatPictures { get; set; }
+        public string FlatPicture { get; set; }
 
         public Address Address { get; set; }
 

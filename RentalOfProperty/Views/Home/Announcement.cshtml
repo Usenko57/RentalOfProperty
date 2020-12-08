@@ -6,7 +6,7 @@
 
 <h1>Объявление</h1>
 
-<form asp-action="Announcement" asp-controller="Home" asp-anti-forgery="true">
+<form enctype="multipart/form-data" asp-action="Announcement" asp-controller="Home" asp-anti-forgery="true">
     <div class="validation" asp-validation-summary="ModelOnly"></div>
     <div>
         <div class="pt-2">
@@ -90,8 +90,7 @@
 
 
 @section scripts{
-    <script type="text/javascript">
-        // Add the following code if you want the name of the file appear on select
+    <script type="text/javascript">        
         $(".custom-file-input").on("change", function () {
             var fileName = $(this).val().split("\\").pop();
             $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
